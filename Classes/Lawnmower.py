@@ -1,26 +1,20 @@
 import pygame.image
 import math
-from src.helper import clamp
+from src.helper import clamp, deg_to_rad, rad_to_deg
 
 class Lawnmower(object):
     def __init__(self, x, y):
         self.step = 5
-        self.anglestep = 2
+        self.anglestep = 5
         self.x = x
         self.y = y
         self.angle = 270
-        self.scale = .4
+        self.scale = .3
         self.width = 1000
         self.height = 1000
         self.radius = self.width*self.scale*.06
         self.original_image = pygame.transform.scale(pygame.transform.rotate(pygame.image.load("./Images/lawnmower.png"),180),(self.scale*self.width,self.scale*self.height))
         self.image = self.original_image
-
-    def deg_to_rad(self, degrees):
-        return degrees * math.pi / 180
-
-    def rad_to_deg(self, radians):
-        return (radians * 180 / math.pi) % 360
 
 
     def draw(self, win):
@@ -35,17 +29,17 @@ class Lawnmower(object):
         if instruction in [0,1]:
             if instruction == 0: # forwards
                 new_position_x = self.x + self.step * math.cos(
-                    self.deg_to_rad(self.angle)
+                    deg_to_rad(self.angle)
                 )
                 new_position_y = self.y + self.step * math.sin(
-                    self.deg_to_rad(self.angle)
+                    deg_to_rad(self.angle)
                 )
             if instruction == 1: # backwards
                 new_position_x = self.x - self.step * math.cos(
-                    self.deg_to_rad(self.angle)
+                    deg_to_rad(self.angle)
                 )
                 new_position_y = self.y - self.step * math.sin(
-                    self.deg_to_rad(self.angle)
+                    deg_to_rad(self.angle)
                 )
             self.x = new_position_x
             self.y = new_position_y
@@ -72,5 +66,6 @@ class Lawnmower(object):
                 box_center = grass.box_centers[i][j]
                 if (box_center[0]-self.x)**2 + (box_center[1]-self.y)**2 < self.radius**2:
                     grass.cut(i,j)
+
 
 
