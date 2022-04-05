@@ -7,7 +7,7 @@ class Grass(object):
         self.whitespace = 50
         self.width = width
         self.height = height - self.whitespace
-        self.resolution = 200
+        self.resolution = 100
         self.color = ((0, 0, 0), (22, 128, 48), (128, 199, 30))  # no grass, uncut, cut
         self.grass = np.ones((self.resolution, self.resolution))
         print(self.grass)

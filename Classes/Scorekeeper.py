@@ -5,10 +5,10 @@ import numpy as np
 
 # noinspection SpellCheckingInspection
 class Scorekeeper(object):
-    def __init__(self):
+    def __init__(self,starting_seconds):
         self.score = 0
         self.score_color = (34, 123, 210)
-        self.end_time = time.time() + 20
+        self.end_time = time.time() + starting_seconds
 
     def calculate(self, grass):
         cut_grass = grass.grass == 2

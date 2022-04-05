@@ -12,7 +12,6 @@ class Hitbox(object):
         self.update(x,y,angle)
 
     def _rotate(self,x,y,x_pivot,y_pivot,theta):
-
         x_prime = math.cos(theta)*(x-self.x) - math.sin(theta)*(y-self.y)
         y_prime = math.sin(theta)*(x-self.x) + math.cos(theta)*(y-self.y)
         return( [x_prime+self.x,y_prime+self.y])

@@ -7,25 +7,30 @@ from src.helper import clamp, deg_to_rad, rotate_vector
 class Lawnmower(Movable):
     def __init__(self,x,y):
         self.scale = .3
-        width = 25
+        width = 40
         height=100
         super().__init__(x,y,width,height,(0,height*.3),270)
-        self.original_image = pygame.transform.scale(
-            pygame.transform.rotate(pygame.image.load("./Images/lawnmower_0.png"), 180),
-            (self.hitbox.width, self.hitbox.height),
-        )
-        self.image = self.original_image
+        #super().__init__(x,y,width,height,(10,height*1.3),270)
+        self.original_image = []
+        for i in range(0,2):
+            self.original_image.append(pygame.transform.scale(
+                pygame.transform.rotate(pygame.image.load("./Images/lawnmower_%d.png" % i), 180),
+                (self.hitbox.width, self.hitbox.height),
+            ))
+        self.image_index = 0
+        self.steps_per_image = 6
+        self.image = self.original_image[0]
+        self.image_tick = 0
         self.radius = self.width / 2
-
+        self.rotated_p_vector = [self.hitbox.p_vector[0]-self.width/2, self.hitbox.p_vector[1]-self.height/2]
+        self.rotated_p_vector = self.hitbox.p_vector
 
 
     def draw(self, win):
         angle = self.angle - 270
 
-        #win.blit(self.image, (self.x-self.width/2, self.y-self.height/2))
-        #pygame.draw.line(win,(0,0,0),(self.width/2+self.x,self.height/2+self.y),(self.width/2+self.x+self.center_to_pivot_vector[0],self.height/2+self.y+self.center_to_pivot_vector[1]),4)
-        #pygame.draw.rect(win,(255,0,0),(self.x,self.y,self.width,self.height),2)
-        pygame.draw.circle(win,(255,0,0),(self.x,self.y),3)
+        win.blit(self.image, (self.x-self.image.get_width()/2+self.rotated_p_vector[0], self.y-self.image.get_height()/2+self.rotated_p_vector[1]))
+        #pygame.draw.circle(win,(255,0,0),(self.x,self.y),3)
         self.hitbox.draw(win)
 
     def cut(self, grass):
@@ -48,5 +53,14 @@ class Lawnmower(Movable):
 
     def update(self):
         super().update()
-        self.image = pygame.transform.rotate(self.original_image, -self.angle - 90)
+        theta = deg_to_rad(self.angle-270)
+        new_x = math.cos(theta)*(self.hitbox.p_vector[0]) - math.sin(theta)*(self.hitbox.p_vector[1])
+        new_y = math.sin(theta)*(self.hitbox.p_vector[0]) + math.cos(theta)*(self.hitbox.p_vector[1])
+        self.rotated_p_vector = [new_x,new_y]
+        self.image_tick += 1
+        self.image_tick = self.image_tick % self.steps_per_image
+        if self.image_tick == 0:
+            self.image_index += 1
+            self.image_index = self.image_index % (len(self.original_image))
+        self.image = pygame.transform.rotate(self.original_image[self.image_index], -self.angle - 90)
 

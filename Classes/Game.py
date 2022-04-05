@@ -11,9 +11,9 @@ class Game(object):
         self.game_height = 650
         self.win = pygame.display.set_mode((self.game_width, self.game_height))
         self.clock = pygame.time.Clock()
-        self.lawnmower = Lawnmower(500, 300)
+        self.lawnmower = Lawnmower(500, 500)
         self.grass = Grass(self.game_width, self.game_height)
-        self.scorekeeper = Scorekeeper()
+        self.scorekeeper = Scorekeeper(120)
         self.obstructions = [Blackbox(200,300,100,20),Blackbox(575,500,10,120)]
         pygame.init()
 
